@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render , redirect
 import json
 from django.http import HttpResponse , Http404 , JsonResponse
 from .models import Tweet
@@ -39,4 +39,6 @@ def tweet_create(reqeust):
         tweet = Tweet(content=content)
         tweet.save()
         form = TweetForm()
+        if reqeust.POST.get('next' , None) is not None:
+            return redirect(reqeust.POST.get('next'))
     return render(reqeust , 'components/forms.html' , context={"form" : form})
