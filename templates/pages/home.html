@@ -1,17 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1 class="text-center">Welcome to tweet</h1>
+    <h1 class="text-center m-2">Welcome to tweet</h1>
 
-    <div id='tweets' class="text-center">
+    <div id='tweets' class="text-center row">
 
     </div>
 
 <script>
     const handleDidLike = (id , currCount) => {
     }
-    const likeBtn = (tweet) => `<button class="btn btn-info" onclick='handleDidLike(${tweet.id} , ${tweet.likes})'>Like</button>`
-    const formatTweet = tweet => `<div class='m-3' id='tweet-${tweet.id}'><h3 class='text-danger'>Tweet ${tweet.id}</h3><p class='text-info m-3'>${tweet.content}<p class='text-success m-3'>likes : ${tweet.likes}<p></p>${likeBtn(tweet)}</div>`
+    const likeBtn = (tweet) => `<button class="btn btn-info mb-2" onclick='handleDidLike(${tweet.id} , ${tweet.likes})'>Like</button>`
+    const formatTweet = tweet => `<div style="display: inline-block;" class='rounded m-3 col-12 col-md-3 border bg-dark' id='tweet-${tweet.id}'><h3 class='text-danger'>Tweet ${tweet.id}</h3><p class='text-info m-3'>${tweet.content}<p class='text-success m-3'>likes : ${tweet.likes}<p></p>${likeBtn(tweet)}</div>`
     const tweetElement = document.getElementById('tweets');
     tweetElement.innerHTML = "loading..."
     fetch('/tweets').then(response => response.json()).then(r => {
