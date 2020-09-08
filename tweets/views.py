@@ -3,6 +3,7 @@ import json
 from django.http import HttpResponse , Http404 , JsonResponse
 from .models import Tweet
 import random
+from .forms import TweetForm
 
 def home_view(request):
     return render(request , 'pages/home.html' , {})
@@ -29,3 +30,13 @@ def tweet_detail(request , id):
         
     
     return JsonResponse(data , status=status)
+
+
+def tweet_create(reqeust):
+    form = TweetForm(reqeust.POST or None)
+    if form.is_valid():
+        content = form.cleaned_data.get('content')
+        tweet = Tweet(content=content)
+        tweet.save()
+        form = TweetForm()
+    return render(reqeust , 'components/forms.html' , context={"form" : form})
