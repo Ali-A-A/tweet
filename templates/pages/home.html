@@ -41,6 +41,8 @@
                 const newEl = formatTweet(newTweet)
                 const og = tweetsContainer.innerHTML
                 tweetsContainer.innerHTML = newEl + og
+            } else if (xhr.status === 403) {
+                alert("You must Login")
             }
         }
         xhr.onerror = () => {
@@ -53,7 +55,7 @@
     const loadTweets = (tweetsContainer) => {
         fetch('/tweets').then(response => response.json()).then(r => {
         tweetsContainer.innerHTML = "";
-        r.response.map(tweet => tweetsContainer.innerHTML += formatTweet(tweet))
+        r.map(tweet => tweetsContainer.innerHTML += formatTweet(tweet))
         });
     }
     loadTweets(tweetsContainer);
