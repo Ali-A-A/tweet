@@ -26,6 +26,7 @@ SECRET_KEY = 'vb_15ak!7d%b97xk7)5cj2+5xm33na+tbc6+qr)6jfzocs^gti'
 DEBUG = True
 
 ALLOWED_HOSTS = []
+TWEET_OPTIONS = ["like" , "unlike" , "retweet"]
 
 
 # Application definition

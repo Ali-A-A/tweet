@@ -51,6 +51,40 @@
         xhr.send(data)
 
     }
+    const handleDidLike = (id , currCount , action) => {
+        const xhr = new XMLHttpRequest()
+        const csrftoken = getCookie('csrftoken')
+        xhr.open("POST" , "/tweet/action")
+        xhr.setRequestHeader("Content-Type" , "application/json")
+        xhr.setRequestHeader("HTTP_X_REQUESTED_WITH" , "XMLHttpRequest")
+        xhr.setRequestHeader("X-Requested-With" , "XMLHttpRequest") 
+        xhr.setRequestHeader("X-CSRFToken" , csrftoken)
+        const data = JSON.stringify({
+            id : id,
+            action : action
+        })
+        xhr.onload = () => {
+            console.log(xhr.response)
+            loadTweets(tweetsContainer);
+        }  
+        xhr.send(data)
+    }
+    // const handleDidLike = (id , curr) => {
+    //     var csrftoken = getCookie('csrftoken')
+    //     fetch('/tweet/action' , {
+    //         "method" : "POST",
+    //         headers: {
+    //             "Content-Type" : "application/json",
+    //             "HTTP_X_REQUESTED_WITH" : "XMLHttpRequest",
+    //             "X-Requested-With" : "XMLHttpRequest",
+    //             "X-CSRFToken" : csrftoken
+    //         },
+    //         body : JSON.stringify({
+    //             id : id,
+    //             action : "like"
+    //         })
+    //     }).then(res => res.json()).then(res => console.log(res))
+    // }
     const tweetsContainer = document.getElementById("tweets");
     const loadTweets = (tweetsContainer) => {
         fetch('/tweets').then(response => response.json()).then(r => {
@@ -59,10 +93,27 @@
         });
     }
     loadTweets(tweetsContainer);
-    const likeBtn = (tweet) => `<button class="btn btn-info mb-2" onclick='handleDidLike(${tweet.id} , ${tweet.likes})'>Like</button>`
-    const formatTweet = tweet => `<div style="display: inline-block;" class='rounded m-3 col-12 col-md-3 border bg-dark' id='tweet-${tweet.id}'><h3 class='text-danger'>Tweet ${tweet.id}</h3><p class='text-info m-3'>${tweet.content}<p class='text-success m-3'>likes : ${tweet.likes}<p></p>${likeBtn(tweet)}</div>`
+    const likeBtn = (tweet) => `<button class="btn btn-success ml-2" onclick='handleDidLike(${tweet.id} , ${tweet.likes} , "like")'>Like</button>`
+    const unLikeBtn = (tweet) => `<button class="btn btn-danger ml-2" onclick='handleDidLike(${tweet.id} , ${tweet.likes} , "unlike")'>Un Like</button>`
+    const reTweetBtn = (tweet) => `<button class="btn btn-info m-2" onclick='handleDidLike(${tweet.id} , ${tweet.likes} , "retweet")'>Re Tweet</button>`
+    const formatTweet = tweet => `<div style="display: inline-block;" class='rounded m-3 col-12 col-md-3 border bg-dark' id='tweet-${tweet.id}'><h3 class='text-danger'>Tweet ${tweet.id}</h3><p class='text-info m-3'>${tweet.content}<p class='text-success m-3'>likes : ${tweet.likes}<p></p>${likeBtn(tweet)}${unLikeBtn(tweet)}${reTweetBtn(tweet)}</div>`
     const tweetElement = document.getElementById('tweets');
     tweetElement.innerHTML = "loading..."
+
+    const getCookie = (name) => {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 
 
     

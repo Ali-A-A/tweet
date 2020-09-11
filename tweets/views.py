@@ -6,8 +6,9 @@ import random
 from .forms import TweetForm
 from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication
-from .serializers import TweetSerializer
+from .serializers import TweetSerializer , TweetActionSerializer , TweetCreateSerializer
 from rest_framework.decorators import api_view , authentication_classes , permission_classes
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.permissions import IsAuthenticated
 
 def home_view(request):
@@ -40,7 +41,7 @@ def tweet_detail_pure(request , id):
 # @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticated])
 def tweet_create(request):
-    serializer = TweetSerializer(data = request.POST)
+    serializer = TweetCreateSerializer(data = request.POST)
     if serializer.is_valid(raise_exception=True):
         serializer.save(user=request.user)
         return Response(serializer.data , status=201)
@@ -76,6 +77,33 @@ def tweet_delete(request , id):
     x = obj[0]
     x.delete()
     return Response({"message" : "Tweet Deleted Successfully"})
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def tweet_action(request):
+    serializer = TweetActionSerializer(data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        data = serializer.validated_data
+        id = data.get("id")
+        action = data.get("action")
+        content = data.get("content")
+        objs = Tweet.objects.filter(id=id)
+        if not objs.exists():
+            return Response({} , status=404)
+        object = objs.first()
+        if action == "like":
+            object.likes.add(request.user)
+            serializer = TweetSerializer(object)
+            return Response(serializer.data)
+        elif action == "unlike":
+            object.likes.remove(request.user)
+        elif action == "retweet":
+            parent = object
+            new = Tweet.objects.create(user=request.user , parent=parent , content=content)
+            serializer = TweetSerializer(new)
+            return Response(serializer.data)
+
+    
 
 
 
