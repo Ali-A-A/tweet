@@ -73,7 +73,7 @@ def tweet_delete(request , id):
 
     qs = obj.filter(user=request.user)
     if not qs.exists():
-        return Response({"message" : "You don't have permission!"} , stauts=403)
+        return Response({"message" : "You don't have permission!"} , status=403)
     x = obj[0]
     x.delete()
     return Response({"message" : "Tweet Deleted Successfully"})
@@ -97,11 +97,13 @@ def tweet_action(request):
             return Response(serializer.data)
         elif action == "unlike":
             object.likes.remove(request.user)
+            serializer = TweetSerializer(object)
+            return Response(serializer.data)
         elif action == "retweet":
             parent = object
             new = Tweet.objects.create(user=request.user , parent=parent , content=content)
             serializer = TweetSerializer(new)
-            return Response(serializer.data)
+            return Response(serializer.data , status=201)
 
     
 
