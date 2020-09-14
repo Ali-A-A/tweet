@@ -41,7 +41,7 @@ def tweet_detail_pure(request , id):
 # @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticated])
 def tweet_create(request):
-    serializer = TweetCreateSerializer(data = request.POST)
+    serializer = TweetCreateSerializer(data = request.data)
     if serializer.is_valid(raise_exception=True):
         serializer.save(user=request.user)
         return Response(serializer.data , status=201)

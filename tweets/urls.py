@@ -6,5 +6,5 @@ from tweets.views import tweet_detail , tweet_list_view , tweet_create , tweet_d
 urlpatterns = [
     path('<int:id>' , tweet_detail),
     path('delete/<int:id>' , tweet_delete),
-    path('action' , tweet_action)
+    path('action/' , tweet_action)
 ]
