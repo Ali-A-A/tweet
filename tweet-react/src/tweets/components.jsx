@@ -3,8 +3,6 @@ import { loadTweets , handleDidLike , createTweet } from '../lookup/components'
 
 
 
-
-
 export const TweetList = (props) => {
     const [tweets , setTweets] = useState([])
     const [tweets2 , setTweets2] = useState([])
@@ -21,7 +19,7 @@ export const TweetList = (props) => {
     return (
         <div className="App">
         {tweets2.map(((tweet) => {
-            return <Tweet tweet={tweet} setTweets={setTweets} key={tweet.id} />
+            return <Tweet tweet={tweet} setTweets={props.reTweetCallback} className='rounded m-3 col-10 border bg-dark' key={tweet.id} />
         }))}
     </div>
     )
@@ -50,34 +48,61 @@ export const ReTweetBtn = (props) => {
     return <button className="btn btn-info m-2" onClick={() => handleDidLike(tweet.id , setTweets , tweet.content , 'retweet')}>Re Tweet</button>
 }
 
-
-export const Tweet = props => {
+const ParentTweet = (props) => {
     const {tweet , setTweets} = props
     return (
-    <div style={{display: "inline-block"}} className='rounded m-3 col-12 col-md-5 col-lg-3 border bg-dark' id={"tweet-" + tweet.id}>
-      <h3 className='text-success'>Tweet {tweet.id}</h3>
-      <div className='text-info m-3'><p>{tweet.content ? tweet.content : 'NO CONTENT'}</p></div>
-      <Btns tweet={tweet} />
-      <ReTweetBtn tweet={tweet} setTweets={setTweets} />
+        <Fragment>
+        {tweet.parent && <h3 className="text-success mt-3">Retweet of :</h3>}
+            <div>
+                <p>{tweet.parent && <Tweet tweet={tweet.parent} setTweets={setTweets} className='rounded m-3 col-10 border bg-warning' />}</p>
+            </div>
+        </Fragment>
+    )
+}
+
+
+export const Tweet = props => {
+    const {tweet , setTweets , className} = props
+    return (
+    <div style={{display: "inline-block"}} className={className} id={"tweet-" + tweet.id}>
+        <h3 className='text-success'>Tweet {tweet.id}</h3>
+        <ParentTweet tweet={tweet} setTweets={setTweets} />
+        <div className='text-info m-3'><p>{tweet.content ? tweet.content : 'NO CONTENT'}</p></div>
+        <Btns tweet={tweet} />
+        <ReTweetBtn tweet={tweet} setTweets={setTweets} />
     </div>)
 }
 
 export const TweetsComponent = (props) => {
     const textRef = React.createRef()
     const [newTweets , setNewTweets] = useState([])
+
+    const reTweetCallback = (res , stat) => {
+        var tempRetweet = [...newTweets]
+        if(stat === 201) {
+            tempRetweet.unshift(JSON.parse(res))
+            setNewTweets(tempRetweet)
+        } else {
+            alert("error in retweet")
+        }
+    }
     const handleSubmit = (e) => {
         e.preventDefault()
         const newVal = textRef.current.value
-        var tempNewTweets = [...newTweets]
-        createTweet(newVal , (res , stat) => {
-            if(stat === 201) {
-                tempNewTweets.unshift(JSON.parse(res))
-                setNewTweets(tempNewTweets)
-            }
-            else {
-                alert("error in create")
-            }
-        })
+        if(newVal.trim() === "") {
+            alert("Tweet can't be empty")
+        } else {
+            var tempNewTweets = [...newTweets]
+            createTweet(newVal , (res , stat) => {
+                if(stat === 201) {
+                    tempNewTweets.unshift(JSON.parse(res))
+                    setNewTweets(tempNewTweets)
+                }
+                else {
+                    alert("error in create")
+                }
+            })
+        }
         textRef.current.value = ''
     }
     return (
@@ -92,7 +117,7 @@ export const TweetsComponent = (props) => {
                 </div>
                 </form>
             </div>
-            <TweetList newTweets={newTweets}/>
+            <TweetList newTweets={newTweets} reTweetCallback={reTweetCallback}/>
         </div>
     )
 }

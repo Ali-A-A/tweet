@@ -8,7 +8,7 @@ class TweetLikeAdmin(admin.TabularInline):
 
 class TweetAdmin(admin.ModelAdmin):
     inlines = [TweetLikeAdmin]
-    list_display = ['__str__' , 'user']
+    list_display = ['__str__' , 'user' , 'content']
     search_fields = ['user__username']
     class Meta:
         model = Tweet

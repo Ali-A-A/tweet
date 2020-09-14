@@ -21,16 +21,15 @@ export const handleDidLike = (id , callback , content , action) => {
         content : content
     })
     xhr.onload = () => {
-        if(action === 'retweet')
-            loadTweets(callback)
-        else
-            callback(xhr.response , xhr.status)
+        console.log(xhr.status)
+        callback(xhr.response , xhr.status)
     }  
     xhr.onerror = (e) => {
         alert("there was an error2")
     }
     xhr.send(data)
 }
+
 
 export const createTweet = (content , callback) => {
     const xhr = new XMLHttpRequest()
