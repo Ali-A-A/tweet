@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react'
-import { loadTweets , handleDidLike , createTweet } from '../lookup/components'
+import { loadTweets , handleDidLike , createTweet , apiTweetDetail } from '../lookup/components'
 
 
 
@@ -40,6 +40,7 @@ export const Btns = (props) => {
             <div className='text-danger m-3'><p>Likes : {likes}</p></div>
             <button className="btn btn-success ml-2" onClick={() => handleDidLike(tweet.id , handleAction , tweet.content ,  'like')}>Like</button>
             <button className="btn btn-danger ml-2" onClick={() => handleDidLike(tweet.id , handleAction , tweet.content ,  'unlike')}>Un Like</button>
+            <button className="btn btn-primary ml-2" onClick={(e) => {console.log("HI");window.location.href = `/${tweet.id}`}}>View</button>
         </Fragment>
     )
 }
@@ -69,6 +70,7 @@ export const Tweet = props => {
         <h3 className='text-success'>Tweet {tweet.id}</h3>
         <ParentTweet tweet={tweet} setTweets={setTweets} />
         <div className='text-info m-3'><p>{tweet.content ? tweet.content : 'NO CONTENT'}</p></div>
+        {className === 'rounded m-3 col-10 border bg-warning' ? <button className="btn btn-primary ml-2" onClick={(e) => {console.log("HI");window.location.href = `/${tweet.id}`}}>View</button> : null}
         {className === 'rounded m-3 col-10 border bg-warning' ? null : <Fragment><Btns tweet={tweet} /><ReTweetBtn tweet={tweet} setTweets={setTweets} /></Fragment>}
     </div>)
 }
@@ -122,4 +124,24 @@ export const TweetsComponent = (props) => {
             <TweetList newTweets={newTweets} reTweetCallback={reTweetCallback} username={username} />
         </div>
     )
+}
+
+export const TweetDetail = (props) => {
+    const {tweetId} = props
+    const [lookup , setLookUp] = useState(false)
+    const [tweet , setTweet] = useState(null)
+    useEffect(() => {
+        if(lookup === false) {
+            apiTweetDetail(tweetId , (res , stat) => {
+                if(stat === 200) {
+                    setTweet(JSON.parse(res))
+                } else {
+                    alert("error")
+                }
+            })
+            setLookUp(true)
+        }
+    } , [lookup , setLookUp])
+
+    return tweet === null ? null : <Tweet tweet={tweet} className={props.className} setTweets={props.setTweets} />
 }

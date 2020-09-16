@@ -74,3 +74,22 @@ const getCookie = (name) => {
     }
     return cookieValue;
 }
+
+export const apiTweetDetail = (tweetId , callback) => {
+    const xhr = new XMLHttpRequest()
+    // const csrftoken = getCookie('csrftoken')
+    xhr.open("GET" , `http://127.0.0.1:8000/tweet/${tweetId}`)
+    xhr.setRequestHeader("Content-Type" , "application/json")
+    // if(csrftoken) {
+        // xhr.setRequestHeader("HTTP_X_REQUESTED_WITH" , "XMLHttpRequest")
+        // xhr.setRequestHeader("X-Requested-With" , "XMLHttpRequest") 
+        // xhr.setRequestHeader("X-CSRFToken" , csrftoken)
+    // }
+    xhr.onload = () => {
+        callback(xhr.response , xhr.status)
+    }  
+    xhr.onerror = (e) => {
+        alert("there was an error")
+    }
+    xhr.send()
+}

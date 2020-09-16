@@ -1,5 +1,5 @@
-import {LikeBtn , UnLikeBtn , ReTweetBtn , Tweet , TweetList} from './components';
+import {LikeBtn , UnLikeBtn , ReTweetBtn , Tweet , TweetList , TweetDetail} from './components';
 
 export {
-    LikeBtn , UnLikeBtn , ReTweetBtn , Tweet , TweetList
+    LikeBtn , UnLikeBtn , ReTweetBtn , Tweet , TweetList , TweetDetail
 }
