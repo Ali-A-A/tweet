@@ -4,6 +4,7 @@ import { loadTweets , handleDidLike , createTweet } from '../lookup/components'
 
 
 export const TweetList = (props) => {
+    const {username} = props
     const [tweets , setTweets] = useState([])
     const [tweets2 , setTweets2] = useState([])
     useEffect(() => {
@@ -13,8 +14,8 @@ export const TweetList = (props) => {
         }
     } , [props.newTweets , tweets , tweets2])
     useEffect(() => {
-        loadTweets(setTweets)
-    } , [])
+        loadTweets(setTweets , username)
+    } , [username])
 
     return (
         <div className="App">
@@ -68,12 +69,13 @@ export const Tweet = props => {
         <h3 className='text-success'>Tweet {tweet.id}</h3>
         <ParentTweet tweet={tweet} setTweets={setTweets} />
         <div className='text-info m-3'><p>{tweet.content ? tweet.content : 'NO CONTENT'}</p></div>
-        <Btns tweet={tweet} />
-        <ReTweetBtn tweet={tweet} setTweets={setTweets} />
+        {className === 'rounded m-3 col-10 border bg-warning' ? null : <Fragment><Btns tweet={tweet} /><ReTweetBtn tweet={tweet} setTweets={setTweets} /></Fragment>}
     </div>)
 }
 
 export const TweetsComponent = (props) => {
+    const {username} = props
+    const canTweet = props.canTweet === "false" ? false : true
     const textRef = React.createRef()
     const [newTweets , setNewTweets] = useState([])
 
@@ -106,8 +108,8 @@ export const TweetsComponent = (props) => {
         textRef.current.value = ''
     }
     return (
-        <div className={props.className}>
-            <div className="m-3">
+        <div className='text-center'>
+            {canTweet && <div className="m-3">
                 <form onSubmit={handleSubmit} className="col-6 offset-3">
                 <div className="justify-content-center">
                     <textarea ref={textRef} className="form-control" name="tweet">
@@ -116,8 +118,8 @@ export const TweetsComponent = (props) => {
                     <button type='submit' className="btn btn-primary my-3">Tweet</button>
                 </div>
                 </form>
-            </div>
-            <TweetList newTweets={newTweets} reTweetCallback={reTweetCallback}/>
+            </div>}
+            <TweetList newTweets={newTweets} reTweetCallback={reTweetCallback} username={username} />
         </div>
     )
 }

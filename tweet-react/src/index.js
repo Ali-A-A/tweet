@@ -3,12 +3,14 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import { TweetsComponent } from './tweets/components';
 
+
+const tweetEl = document.getElementById("root");
+console.log(tweetEl.dataset.username)
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+   <TweetsComponent username={tweetEl.dataset.username} canTweet={tweetEl.dataset.canTweet} />,
+  tweetEl
 );
 
 // If you want your app to work offline and load faster, you can change

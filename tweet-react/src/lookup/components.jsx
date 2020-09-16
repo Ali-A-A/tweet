@@ -1,6 +1,12 @@
 
-export const loadTweets = (setTweets) => {
-    fetch('http://127.0.0.1:8000/tweets/').then(response => response.json()).then(r => {
+export const loadTweets = (setTweets , username) => {
+    let url;
+    if (username) {
+        url = `http://127.0.0.1:8000/tweets/?username=${username}`
+    } else {
+        url = 'http://127.0.0.1:8000/tweets/'
+    }
+    fetch(url).then(response => response.json()).then(r => {
       setTweets(r)
     }).catch(e => alert("there was an error"));
 }
