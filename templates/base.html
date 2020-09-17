@@ -10,6 +10,22 @@
     {% include "components/navbar.html" %}
     {% block content %}{% endblock content %}
 
+    <script>
+      var path = window.location.pathname
+      var idRegex = /(?<tweetId>\d+)/
+      var match = path.match(idRegex)
+      var tweetId = match.groups.tweetId
+      if(tweetId) {
+        console.log(tweetId)
+        var tweetRoot = document.getElementById("root")
+        tweetRoot.className = 'd-none'
+        var tweetEl = `<div class='tweet-detail' data-tweet-id="${tweetId}" data-class-name='rounded m-3 col-10 border bg-dark'></div>`
+        var mainCon = document.getElementById("tweet-container")
+        mainCon.innerHTML = tweetEl
+
+      }
+    </script>
+
     {% include 'react/base_embed.html' %}
     {% include 'react/js.html' %}
     {% comment %} <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

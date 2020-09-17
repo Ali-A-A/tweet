@@ -14,6 +14,16 @@ from rest_framework.permissions import IsAuthenticated
 def home_view(request):
     return render(request , 'pages/home.html' , {})
 
+def tweets_list_view(request):
+    return render(request , 'tweets/list.html' , {})
+
+def tweets_detail_view(request , tweet_id):
+    print('ddddddddddddddddd' , tweet_id)
+    return render(request , 'tweets/detail.html' , {"tweet_id" : tweet_id})
+
+def tweets_profile_view(request , username):
+    return render(request , 'tweets/profile.html' , {"profile_username" : username})
+
 
 def tweet_list_view_pure(request):
     qs = Tweet.objects.all()
