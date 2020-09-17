@@ -4,6 +4,8 @@ from tweets.views import home_view , tweet_detail , tweet_list_view , tweet_crea
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
+from django.http import HttpResponse
+from accounts.views import login_view , register_view , logout_view
 
 
 urlpatterns = [
@@ -15,7 +17,10 @@ urlpatterns = [
     path('create-tweet' , tweet_create),
     path('tweets/' , tweet_list_view),
     path('tweet/' , include("tweets.urls")),
-    path('react/' , TemplateView.as_view(template_name='react.html'))
+    path('login' , login_view),
+    path('register' , register_view),
+    path('logout' , logout_view),
+    path('react/' , TemplateView.as_view(template_name='react.html')),
 ]
 
 if settings.DEBUG:

@@ -10,6 +10,7 @@ from .serializers import TweetSerializer , TweetActionSerializer , TweetCreateSe
 from rest_framework.decorators import api_view , authentication_classes , permission_classes
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth.decorators import login_required
 
 def home_view(request):
     return render(request , 'pages/home.html' , {})
@@ -48,7 +49,7 @@ def tweet_detail_pure(request , id):
     return JsonResponse(data , status=status)
 
 @api_view(['POST'])
-# @authentication_classes([SessionAuthentication])
+@authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticated])
 def tweet_create(request):
     serializer = TweetCreateSerializer(data = request.data)

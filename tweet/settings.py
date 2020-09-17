@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
+    'accounts',
     'tweets',
 ]
 
@@ -136,16 +137,15 @@ DEFAULT_AUTHENTICATION_CLASSES = [
     'rest_framework.authentication.SessionAuthentication'
 ]
 
-if DEBUG:
-    DEFAULT_AUTHENTICATION_CLASSES += [
-        'tweet.rest_api.dev.DevAuth'
-    ]
+# if DEBUG:
+#     DEFAULT_AUTHENTICATION_CLASSES += [
+#         'tweet.rest_api.dev.DevAuth'
+#     ]
    
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
-        'tweet.rest_api.dev.DevAuth'
     ],
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
