@@ -36,20 +36,22 @@ class TweetTestCase(TestCase):
 
     def test_tweet_action_like(self):
         client = self.get_client()
-        data = client.post('/tweet/action' , {"id" : 1 , "action" : "like"})
+        data = client.post('/tweet/action/' , {"id" : 1 , "action" : "like"})
         self.assertEqual(data.status_code , 200)
         self.assertEqual(data.json().get('likes') , 1)
+        number_of_likes = self.user.tweet_user.count()
+        self.assertEqual(number_of_likes , 1)
 
     def test_tweet_action_unlike(self):
         client = self.get_client()
-        client.post('/tweet/action' , {"id" : 1 , "action" : "like"})
-        data = client.post('/tweet/action' , {"id" : 1 , "action" : "unlike"})
+        client.post('/tweet/action/' , {"id" : 1 , "action" : "like"})
+        data = client.post('/tweet/action/' , {"id" : 1 , "action" : "unlike"})
         self.assertEqual(data.status_code , 200)
         self.assertEqual(data.json().get('likes') , 0)
 
     def test_tweet_action_retweet(self):
         client = self.get_client()
-        data = client.post('/tweet/action' , {"id" : 1 , "action" : "retweet" , "content" : "tweet1"})
+        data = client.post('/tweet/action/' , {"id" : 1 , "action" : "retweet" , "content" : "tweet1"})
         self.assertEqual(data.status_code , 201)
         self.assertEqual(data.json().get('content') , 'tweet1')
         self.assertEqual(data.json().get('likes') , 0)
@@ -63,7 +65,7 @@ class TweetTestCase(TestCase):
 
     def test_unauthenticated_user(self):
         client = APIClient()
-        data = client.post('/tweet/action' , {"id" : 1 , "action" : "like"})
+        data = client.post('/tweet/action/' , {"id" : 1 , "action" : "like"})
         self.assertEqual(data.status_code , 403)
         self.assertEqual(data.json().get('detail') , 'Authentication credentials were not provided.')
 
