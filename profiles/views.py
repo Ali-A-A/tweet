@@ -9,6 +9,9 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view , authentication_classes , permission_classes
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.pagination import PageNumberPagination
+from tweets.models import Tweet
+from tweets.serializers import TweetSerializer
 import json
 
 
@@ -73,3 +76,19 @@ def user_follow(request , username):
     elif action == "unfollow":
         profile.followers.remove(curr_user)
     return Response({"count" : profile.followers.all().count()} , status=200)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def tweet_feed_view(request , *args , **kwargs):
+    panigator = PageNumberPagination()
+    panigator.page_size = 20
+    user = request.user
+    profiles = user.following.all()
+    followed_users_id = []
+    if profiles.exists():
+        followed_users_id = [x.user.id for x in profiles]
+    followed_users_id.append(user.id)
+    qs = Tweet.objects.filter(user__id__in=followed_users_id)
+    panigator_qs = panigator.paginate_queryset(qs , request)
+    serializer = TweetSerializer(panigator_qs , many=True)
+    return panigator.get_paginated_response(serializer.data)

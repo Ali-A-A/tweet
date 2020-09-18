@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 from django.views.generic import TemplateView
 from django.http import HttpResponse
 from accounts.views import login_view , register_view , logout_view
-from profiles.views import profile_view , profile_updata_view , user_follow
+from profiles.views import profile_view , profile_updata_view , user_follow , tweet_feed_view
 
 
 urlpatterns = [
@@ -18,6 +18,7 @@ urlpatterns = [
     path('tweets/' , tweet_list_view),
     path('tweet/' , include("tweets.urls")),
     path('profiles/<str:username>/follow/' , user_follow),
+    path('profiles/feed/' , tweet_feed_view),
     path('login' , login_view),
     path('register' , register_view),
     path('profiles/update' , profile_updata_view),
