@@ -7,7 +7,7 @@ User = get_user_model()
 class Profile(models.Model):
     user = models.OneToOneField(User , on_delete=models.CASCADE)
     bio = models.TextField(blank=True , null=True)
-
+    followers = models.ManyToManyField(User , related_name='following' , blank=True)
 
 def user_did_save(sender , instance , created , *args , **kwargs):
     Profile.objects.get_or_create(user=instance)

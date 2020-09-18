@@ -119,9 +119,6 @@ def tweet_action(request):
             serializer = TweetSerializer(new)
             return Response(serializer.data , status=201)
 
-    
-
-
 
 def tweet_create_pure(reqeust):
     if not reqeust.user.is_authenticated:

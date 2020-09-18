@@ -4,6 +4,15 @@ from django.contrib.auth.decorators import login_required
 
 from .models import Profile
 from .forms import ProfileForm
+from django.contrib.auth import get_user_model
+from rest_framework.response import Response
+from rest_framework.decorators import api_view , authentication_classes , permission_classes
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.permissions import IsAuthenticated
+import json
+
+
+User = get_user_model()
 
 
 def profile_updata_view(request):
@@ -39,3 +48,28 @@ def profile_view(reqeust):
         "profile" : qs.first()
     }
     return render(reqeust , "profiles/detail.html" , context)
+
+
+@api_view(['POST'])
+@authentication_classes([SessionAuthentication])
+@permission_classes([IsAuthenticated])
+def user_follow(request , username):
+    curr_user = request.user
+    to_follow_qs = User.objects.filter(username=username)
+    if not to_follow_qs.exists():
+        return Response({} , status=404)
+    to_follow = to_follow_qs.first()
+    profile = to_follow.profile
+    if curr_user.username == username:
+        return Response({"count" : profile.followers.all().count()} , status=200)
+    data = {}
+    try:
+        data = request.data 
+    except:
+        pass
+    action = data.get("action")
+    if action == "follow":
+        profile.followers.add(curr_user)
+    elif action == "unfollow":
+        profile.followers.remove(curr_user)
+    return Response({"count" : profile.followers.all().count()} , status=200)
