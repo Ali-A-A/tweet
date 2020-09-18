@@ -13,7 +13,7 @@ def login_view(request):
     user = authenticate(username=username , password=password)
     if user is not None:
         login(request ,user)
-        return redirect('/list')
+        return redirect(request.GET.get("next" , "/list"))
     return render(request , "accounts/login.html" , {"form" : form})
 
 def logout_view(reqeust):

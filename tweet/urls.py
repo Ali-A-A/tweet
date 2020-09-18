@@ -1,12 +1,12 @@
 from django.contrib import admin
-from django.urls import path , include
+from django.urls import path , include , re_path
 from tweets.views import home_view , tweet_detail , tweet_list_view , tweet_create , tweet_delete , tweet_action , tweets_detail_view , tweets_list_view , tweets_profile_view
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
 from django.http import HttpResponse
 from accounts.views import login_view , register_view , logout_view
-from profiles.views import profile_view
+from profiles.views import profile_view , profile_updata_view
 
 
 urlpatterns = [
@@ -19,7 +19,8 @@ urlpatterns = [
     path('tweet/' , include("tweets.urls")),
     path('login' , login_view),
     path('register' , register_view),
-    path('profiles/<str:username>' , profile_view),
+    path('profiles/update' , profile_updata_view),
+    re_path(r'^profiles/?' , profile_view),
     path('logout' , logout_view),
     path('react/' , TemplateView.as_view(template_name='react.html')),
 ]

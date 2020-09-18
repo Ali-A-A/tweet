@@ -1,5 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
+<div class="container">
+    <div class="bg-info rounded">
+        <h1 class="text-center m-3 p-2">Hello <span class="badge badge-dark">{{profile_username}}</span></h1>
+        {% if profile.user.first_name %}<h3 class="text-center m-3 p-2">First name: <span class="badge badge-dark ml-2">{{profile.user.first_name}}</span></h3>{% endif %}
+        {% if profile.user.last_name %}<h3 class="text-center m-3 p-2">Last name: <span class="badge badge-dark ml-2">{{profile.user.last_name}}</span></h3>{% endif %}
+        {% if profile.user.email %}<h3 class="text-center m-3 p-2">Email: <span class="badge badge-dark ml-2">{{profile.user.email}}</span></h3>{% endif %}
+        {% if profile.bio %}<h3 class="text-center m-3 p-2">Bio: <span class="badge badge-dark ml-2">{{profile.bio}}</span></h3>{% endif %}
+    </div>
+</div>
+<h2 class="text-center m-5"><span class="badge badge-secondary">Your Tweets:</span></h2>
 <div style="text-align:center"><div class='tweet-detail' data-tweet-id="{{tweet_id}}" data-class-name='rounded m-3 col-10 border bg-dark text-center'></div></div>
 <div  id="root" data-username="{{profile_username}}" data-can-tweet="false"></div>
 {% endblock content %}

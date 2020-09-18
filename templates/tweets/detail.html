@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="text-align:center"><div class='tweet-detail' data-tweet-id="{{tweet_id}}" data-class-name='rounded m-3 col-10 border bg-dark text-center'></div></div>
+<div  id="root" data-username="{{profile_username}}" data-can-tweet="false"></div>
+{% endblock content %}
